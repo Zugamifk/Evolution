@@ -16,11 +16,6 @@ public class Competitor : MonoBehaviour {
     public void Configure(Genome genome)
     {
         m_Model = new CompetitorModel(genome);
-        GenerateBody();
-    }
-
-    public void GenerateBody()
-    {
         m_Model.GenerateModel();
 
         // body
@@ -59,7 +54,6 @@ public class Competitor : MonoBehaviour {
         joint.connectedBody = body.gameObject.GetComponent<Rigidbody2D>();
         joint.connectedAnchor = anchor;
 
-        joint.motor = new JointMotor2D() { motorSpeed = 500, maxMotorTorque = 500 };
-        joint.suspension = new JointSuspension2D() { dampingRatio = 1, frequency = 100 };
+        m_MainBody = body.transform;
     }
 }
