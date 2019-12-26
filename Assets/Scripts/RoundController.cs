@@ -19,7 +19,7 @@ public class RoundController : MonoBehaviour {
         c.gameObject.SetActive(true);
         m_Competitors.Add(c);
         m_Watched = c;
-        c.Configure(new Genome(0));
+        c.Configure(new Genome(Random.Range(0,99999)));
     }
 
     private void Update()
