@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class CompetitorModel {
 
+    Genome m_Genome;
+
     List<Vector2> m_Points = new List<Vector2>();
     List<Vector2> m_JointAnchors = new List<Vector2>();
 
     public List<Vector2> JointAnchors => m_JointAnchors;
+
+    public CompetitorModel(Genome genome)
+    {
+        m_Genome = genome;
+    }
 
     public void GenerateModel()
     {

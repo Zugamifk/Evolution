@@ -7,14 +7,15 @@ public class Competitor : MonoBehaviour {
     [SerializeField]
     CompetitorPart m_PartTemplate;
 
-    CompetitorModel m_Model = new CompetitorModel();
+    CompetitorModel m_Model;
 
     Transform m_MainBody;
 
     public Transform MainBody => m_MainBody;
 
-    private void Start()
+    public void Configure(Genome genome)
     {
+        m_Model = new CompetitorModel(genome);
         GenerateBody();
     }
 

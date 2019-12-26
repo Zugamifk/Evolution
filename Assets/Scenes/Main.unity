@@ -274,7 +274,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Collider: {fileID: 983732711}
   m_MeshFilter: {fileID: 2070942329}
-  m_PointCount: 100
+  m_PointCount: 2000
+  m_Variance: 0.4
 --- !u!4 &983732713
 Transform:
   m_ObjectHideFlags: 0
@@ -437,7 +438,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MeshFilter: {fileID: 776912091}
-  Joints: []
 --- !u!4 &1760994886
 Transform:
   m_ObjectHideFlags: 0
@@ -463,7 +463,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.4
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
