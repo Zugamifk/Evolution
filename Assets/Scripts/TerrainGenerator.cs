@@ -9,17 +9,28 @@ public class TerrainGenerator : MonoBehaviour
     MeshFilter m_MeshFilter;
     [SerializeField]
     int m_PointCount = 100;
+    [SerializeField]
+    float m_Variance = .4f;
 
-    Vector2[] m_Points;
+    float[] m_Points;
 
     private void Start()
     {
-        m_Points = new Vector2[m_PointCount];
+        m_Points = new float[m_PointCount];
+        var surface = new Vector2[m_PointCount];
         for (int i = 0; i < m_PointCount; i++)
         {
-            m_Points[i] = new Vector2(i, Random.Range(2, 5));
+            if (i == 0)
+            {
+                m_Points[i] = 2;
+            }
+            else
+            {
+                m_Points[i] = Mathf.Clamp(m_Points[i - 1] + Random.Range(-m_Variance, m_Variance), 0, 5);
+            }
+            surface[i] = new Vector2(i, m_Points[i]);
         }
-        m_Collider.points = m_Points;
+        m_Collider.points = surface;
 
         UpdateMesh();
     }
@@ -37,8 +48,8 @@ public class TerrainGenerator : MonoBehaviour
             var i0 = i * 2;
             var i1 = i0 + 1;
 
-            verts[i0] = new Vector3(i, 0, 0);
-            verts[i1] = m_Points[i];
+            verts[i0] = new Vector3(i, -25, 0);
+            verts[i1] = new Vector3(i, m_Points[i], 0);
 
             norms[i0] = Vector3.back;
             norms[i1] = Vector3.back;

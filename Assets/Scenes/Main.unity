@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead80b819934276488baed4c5a7c3ff3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Camera: {fileID: 1061156402}
   m_CompetitorTemplate: {fileID: 1263811136}
 --- !u!4 &569088367
 Transform:
@@ -436,7 +437,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MeshFilter: {fileID: 776912091}
-  Collider: {fileID: 0}
   Joints: []
 --- !u!4 &1760994886
 Transform:
