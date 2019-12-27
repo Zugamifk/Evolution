@@ -97,12 +97,19 @@ public class WheelBuilder : CompetitorPartBuilder
         var radius = 1f;
         switch (index)
         {
-            case 0: radius = model.Genome.Wheel1Radius; break;
-            case 1: radius = model.Genome.Wheel2Radius; break;
+            case 0: radius = model.Translator.Wheel1Radius; break;
+            case 1: radius = model.Translator.Wheel2Radius; break;
         }
         var mesh = BuildMesh(radius);
         wheel.MeshFilter.mesh = mesh;
-        wheel.MeshFilter.GetComponent<MeshRenderer>().material.color = Color.blue;
+
+        var color = Color.white;
+        switch (index)
+        {
+            case 0: color = model.Translator.Wheel1Color; break;
+            case 1: color = model.Translator.Wheel2Color; break;
+        }
+        wheel.MeshFilter.GetComponent<MeshRenderer>().material.color = color;
 
         var col = wheel.gameObject.AddComponent<CircleCollider2D>();
         col.radius = radius;

@@ -91,9 +91,9 @@ public class RoundController : MonoBehaviour {
             } else
             {
                 m_RestFrames = 0;
-                m_LastPosition = pos;
             }
 
+            m_LastPosition = pos;
 
             if (m_Tournament.IsTestOver || endEarly)
             {

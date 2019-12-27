@@ -12,10 +12,12 @@ public class CompetitorModel {
     public Genome Genome => m_Genome;
     public List<Vector2> Points => m_Points;
     public List<Vector2> JointAnchors => m_JointAnchors;
+    public Translator Translator;
 
     public CompetitorModel(Genome genome)
     {
         m_Genome = genome;
+        Translator = new Translator(genome);
     }
 
     public void GenerateModel()

@@ -76,7 +76,7 @@ public static class Evolution
     {
         foreach(var f in Genome.Fields)
         {
-            object value = f.GetValue(child);
+            float value = (float)f.GetValue(child);
             value = MutateValue(value);
             f.SetValue(child, value);
         }
@@ -84,14 +84,9 @@ public static class Evolution
         return child;
     }
 
-    static object MutateValue(object value)
+    static float MutateValue(float value)
     {
-        if(value is float)
-        {
-            var mutation = Pow(Random.value, 3) * k_MutationRate;
-            return Clamp01(Random.Range(-mutation, mutation) + (float)value);
-        }
-
-        return null;
+        var mutation = Pow(Random.value, 3) * k_MutationRate;
+        return (1f + Random.Range(-mutation, mutation) + value) % 1f;
     }
 }
