@@ -9,12 +9,15 @@ public class Competitor : MonoBehaviour {
 
     CompetitorModel m_Model;
 
-    Transform m_MainBody;
-
-    public Transform MainBody => m_MainBody;
+    public Transform MainBody;
 
     public void Configure(Genome genome)
     {
+        if(MainBody != null)
+        {
+            Destroy(MainBody.gameObject);
+        }
+
         m_Model = new CompetitorModel(genome);
         m_Model.GenerateModel();
 
@@ -22,6 +25,6 @@ public class Competitor : MonoBehaviour {
         var body = cb.Build(m_Model);
         body.transform.SetParent(transform, false);
 
-        m_MainBody = body.transform;
+        MainBody = body.transform;
     }
 }
