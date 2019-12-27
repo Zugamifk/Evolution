@@ -8,7 +8,17 @@ public static class Evolution
 
     public static void DoSelection(Population population)
     {
-        population.Individuals.Sort((a, b) => (int)Sign(a.Score - b.Score));
+        float score = 0;
+        float max = float.MinValue, min = float.MaxValue;
+        foreach (var i in population.Individuals)
+        {
+            max = Max(max, i.Score);
+            min = Min(min, i.Score);
+            score += i.Score;
+        }
+        Debug.Log($"Mean Score: {score / population.Individuals.Count}\tMin Score: {min}\tMax Score: {max}");
+
+        population.Individuals.Sort((a, b) => (int)Sign(b.Score - a.Score));
         var newPopulation = new List<Genome>();
         var keepCount = population.Individuals.Count / 2;
         for (int i = 0; i < population.Individuals.Count; i++)
@@ -16,7 +26,8 @@ public static class Evolution
             if (i < keepCount)
             {
                 newPopulation.Add(population.Individuals[i].Genome);
-            } else
+            }
+            else
             {
                 var mom = population.Individuals[Random.Range(0, keepCount)].Genome;
                 var dad = population.Individuals[Random.Range(0, keepCount)].Genome;
@@ -27,7 +38,7 @@ public static class Evolution
         }
 
         population.Individuals.Clear();
-        foreach(var i in newPopulation)
+        foreach (var i in newPopulation)
         {
             population.Individuals.Add(new Population.Individual()
             {

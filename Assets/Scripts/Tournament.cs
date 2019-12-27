@@ -18,7 +18,7 @@ public class Tournament {
     public bool IsRoundOver => m_CurrentIndex >= Population.Individuals.Count;
 
     System.DateTime m_StartTime;
-    int m_CurrentIndex;
+    int m_CurrentIndex = -1;
 
     public Tournament(int maxCompetitors, float maxDistance, float maxSeconds)
     {
