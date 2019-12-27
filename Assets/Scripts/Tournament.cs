@@ -10,6 +10,9 @@ public class Tournament {
     public System.TimeSpan Time => System.DateTime.Now - m_StartTime;
     public System.TimeSpan MaxTime;
 
+    public int Individual => m_CurrentIndex;
+    public int Generation;
+
     public float Distance;
     public float MaxDistance;
 
@@ -22,6 +25,7 @@ public class Tournament {
 
     public Tournament(int maxCompetitors, float maxDistance, float maxSeconds)
     {
+        Generation = 0;
         Population = new Population(maxCompetitors);
         MaxTime = System.TimeSpan.FromSeconds(maxSeconds);
         MaxDistance = maxDistance;
@@ -33,6 +37,7 @@ public class Tournament {
         {
             Evolution.DoSelection(Population);
         }
+        Generation++;
         m_CurrentIndex = -1;
         StartTest();
     }

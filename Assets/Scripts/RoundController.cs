@@ -12,6 +12,10 @@ public class RoundController : MonoBehaviour {
     [SerializeField]
     Text m_DistanceText;
     [SerializeField]
+    Text m_IndividualText;
+    [SerializeField]
+    Text m_GenerationText;
+    [SerializeField]
     Competitor m_CompetitorTemplate;
     [SerializeField]
     int m_TournamentSize;
@@ -51,6 +55,8 @@ public class RoundController : MonoBehaviour {
         m_LastPosition = m_StartPosition;
         m_Competitor.transform.position = new Vector3(m_StartPosition, 6, 0);
         m_Competitor.Configure(m_Tournament.Current);
+        m_GenerationText.text = $"<size=36>Generation {m_Tournament.Generation}</size>";
+        m_IndividualText.text = $"<size=36>Individual {m_Tournament.Individual+1}</size> / {m_TournamentSize}";
     }
 
     private void Update()
@@ -68,31 +74,34 @@ public class RoundController : MonoBehaviour {
             m_Tournament.Distance = pos - m_StartPosition;
 
             var step = Mathf.Abs(pos - m_LastPosition);
-            bool endEarly = false;
+            bool endEarly = true;
             if (step > k_MaxStep)
             {
+                Debug.Log($"Glitch: {pos} - {m_LastPosition} = {step}");
                 endEarly = true;
             } else if(m_LastPosition!=m_StartPosition && step <= k_MinStep)
             {
                 m_RestFrames++;
                 if(m_RestFrames > k_MaxRestFrames)
                 {
+                    Debug.Log("Stuck!");
                     endEarly = true;
                     m_RestFrames = 0;
                 }
             } else
             {
                 m_RestFrames = 0;
+                m_LastPosition = pos;
             }
 
-            if (m_Tournament.IsRoundOver)
-            {
-                m_Tournament.StartRound();
-                StartTest();
-            }
-            else if (m_Tournament.IsTestOver || endEarly)
+
+            if (m_Tournament.IsTestOver || endEarly)
             {
                 m_Tournament.StartTest();
+                if (m_Tournament.IsRoundOver)
+                {
+                    m_Tournament.StartRound();
+                }
                 StartTest();
             }
         }

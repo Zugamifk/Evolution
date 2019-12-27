@@ -50,21 +50,48 @@ public static class Evolution
     static Genome Crossover(Genome mom, Genome dad)
     {
         var child = new Genome();
-        child.Wheel1Radius = Random.value > .5f ? mom.Wheel1Radius : dad.Wheel1Radius;
-        child.Wheel2Radius = Random.value > .5f ? mom.Wheel2Radius : dad.Wheel2Radius;
+        var crossoverPoint = Random.Range(1, Genome.Fields.Length - 1);
+        Genome first, second;
+        if(Random.value > .5f)
+        {
+            first = mom;
+            second = dad;
+        } else
+        {
+            first = dad;
+            second = mom;
+        }
+
+        for(int i=0;i<Genome.Fields.Length;i++)
+        {
+            var selection = i < crossoverPoint ? first : second;
+            var value = Genome.Fields[i].GetValue(selection);
+            Genome.Fields[i].SetValue(child, value);
+        }
+
         return child;
     }
 
     static Genome Mutate(Genome child)
     {
-        child.Wheel1Radius = MutateValue(child.Wheel1Radius);
-        child.Wheel2Radius = MutateValue(child.Wheel2Radius);
+        foreach(var f in Genome.Fields)
+        {
+            object value = f.GetValue(child);
+            value = MutateValue(value);
+            f.SetValue(child, value);
+        }
+
         return child;
     }
 
-    static float MutateValue(float value)
+    static object MutateValue(object value)
     {
-        var mutation = Pow(Random.value, 3) * k_MutationRate;
-        return Clamp01(Random.Range(-mutation, mutation) + value);
+        if(value is float)
+        {
+            var mutation = Pow(Random.value, 3) * k_MutationRate;
+            return Clamp01(Random.Range(-mutation, mutation) + (float)value);
+        }
+
+        return null;
     }
 }
