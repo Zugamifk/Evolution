@@ -74,7 +74,7 @@ public class RoundController : MonoBehaviour {
             m_Tournament.Distance = pos - m_StartPosition;
 
             var step = Mathf.Abs(pos - m_LastPosition);
-            bool endEarly = true;
+            bool endEarly = false;
             if (step > k_MaxStep)
             {
                 Debug.Log($"Glitch: {pos} - {m_LastPosition} = {step}");
