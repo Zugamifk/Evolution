@@ -49,34 +49,35 @@ public static class Evolution
 
     static Genome Crossover(Genome mom, Genome dad)
     {
-        var child = new Genome();
+        object child = new Genome();
         var crossoverPoint = Random.Range(1, Genome.Fields.Length - 1);
         Genome first, second;
-        if(Random.value > .5f)
+        if (Random.value > .5f)
         {
             first = mom;
             second = dad;
-        } else
+        }
+        else
         {
             first = dad;
             second = mom;
         }
 
-        for(int i=0;i<Genome.Fields.Length;i++)
+        for (int i = 0; i < Genome.Fields.Length; i++)
         {
             var selection = i < crossoverPoint ? first : second;
             var value = Genome.Fields[i].GetValue(selection);
             Genome.Fields[i].SetValue(child, value);
         }
 
-        return child;
+        return (Genome)child;
     }
 
     static Genome Mutate(Genome child)
     {
-        foreach(var f in Genome.Fields)
+        foreach (var f in Genome.Fields)
         {
-            float value = (float)f.GetValue(child);
+            object value = f.GetValue(child);
             value = MutateValue(value);
             f.SetValue(child, value);
         }
@@ -84,9 +85,33 @@ public static class Evolution
         return child;
     }
 
-    static float MutateValue(float value)
+    static object MutateValue(object value)
+    {
+        if (value is float)
+        {
+            return MutateFloat((float)value);
+        } else if (value is Color32)
+        {
+            return MutateColor32((Color32)value);
+        }
+
+        Debug.Log("Value can't mutate! Type is " + value.GetType());
+        return value;
+    }
+
+    static float MutateFloat(float value)
     {
         var mutation = Pow(Random.value, 3) * k_MutationRate;
-        return (1f + Random.Range(-mutation, mutation) + value) % 1f;
+        return Clamp01(Random.Range(-mutation, mutation) + value);
+    }
+
+    static Color32 MutateColor32(Color32 value)
+    {
+        return new Color32(MutateByte(value.r), MutateByte(value.g), MutateByte(value.b), value.a);
+    }
+
+    static byte MutateByte(byte value)
+    {
+        return (byte)(value ^ (1 << Random.Range(0, 8)));
     }
 }
