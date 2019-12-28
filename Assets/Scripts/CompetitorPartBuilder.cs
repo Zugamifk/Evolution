@@ -14,43 +14,14 @@ public abstract class CompetitorPartBuilder
 
 public class BodyBuilder : CompetitorPartBuilder
 {
-    Mesh BuildMesh(List<Vector2> points)
-    {
-        var m = new Mesh();
-
-        var np = points.Count + 2;
-        var v = new Vector3[np];
-        var n = new Vector3[np];
-        var nt = points.Count * 3;
-        var t = new int[nt];
-
-        v[0] = Vector3.up;
-        v[1] = Vector3.right;
-        v[2] = Vector3.left;
-
-        n[0] = Vector3.back;
-        n[1] = Vector3.back;
-        n[2] = Vector3.back;
-
-        t[0] = 0;
-        t[1] = 1;
-        t[2] = 2;
-
-        m.vertices = v;
-        m.normals = n;
-        m.triangles = t;
-
-        return m;
-    }
-
     public CompetitorPart BuildPart(CompetitorModel model, CompetitorPart partTemplate)
     {
         var body = InstantiatePart(partTemplate);
-        var mesh = BuildMesh(model.Points);
+        var mesh = model.BodyGraph.GetMesh();
         body.MeshFilter.mesh = mesh;
 
         var poly = body.gameObject.AddComponent<PolygonCollider2D>();
-        poly.points = model.GenerateEdgePoints();
+        poly.points = model.BodyGraph.Perimeter;
 
         return body;
     }

@@ -22,13 +22,13 @@ public class CompetitorBuilder {
         wheel.transform.SetParent(body.transform);
         var joint = wheel.GetComponent<WheelJoint2D>();
         joint.connectedBody = body.gameObject.GetComponent<Rigidbody2D>();
-        joint.connectedAnchor = model.JointAnchors[0];
+        joint.connectedAnchor = model.BodyGraph.Perimeter[Random.Range(0, model.BodyGraph.Perimeter.Length)];
 
         wheel = wb.BuildPart(model, m_PartTemplate, 1);
         wheel.transform.SetParent(body.transform);
         joint = wheel.GetComponent<WheelJoint2D>();
         joint.connectedBody = body.gameObject.GetComponent<Rigidbody2D>();
-        joint.connectedAnchor = model.JointAnchors[1];
+        joint.connectedAnchor = model.BodyGraph.Perimeter[Random.Range(0, model.BodyGraph.Perimeter.Length)];
 
         return body.gameObject;
     }

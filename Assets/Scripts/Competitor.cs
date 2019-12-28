@@ -10,7 +10,6 @@ public class Competitor : MonoBehaviour {
     CompetitorModel m_Model;
 
     public Transform MainBody;
-    public event System.Action<float> OnEnded;
 
     public void Configure(Genome genome)
     {
