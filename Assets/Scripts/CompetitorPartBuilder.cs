@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class CompetitorPartBuilder
 {
+    protected const string k_ColorName = "_BaseColor";
+     
     protected CompetitorPart InstantiatePart(CompetitorPart partTemplate)
     {
         var part = GameObject.Instantiate(partTemplate);
@@ -19,7 +21,7 @@ public class BodyBuilder : CompetitorPartBuilder
         var body = InstantiatePart(partTemplate);
         var mesh = model.BodyGraph.GetMesh(model.Translator);
         body.MeshFilter.mesh = mesh;
-        body.MeshFilter.GetComponent<MeshRenderer>().material.color = model.Translator.BodyColor;
+        body.MeshFilter.GetComponent<MeshRenderer>().material.SetColor(k_ColorName, model.Translator.BodyColor);
 
         var poly = body.gameObject.AddComponent<PolygonCollider2D>();
         poly.points = model.BodyGraph.Perimeter;
@@ -69,7 +71,7 @@ public class WheelBuilder : CompetitorPartBuilder
         
         var mesh = BuildMesh(wheel.Radius);
         part.MeshFilter.mesh = mesh;
-        part.MeshFilter.GetComponent<MeshRenderer>().material.color = wheel.Color;
+        part.MeshFilter.GetComponent<MeshRenderer>().material.SetColor(k_ColorName, wheel.Color);
 
         var col = part.gameObject.AddComponent<CircleCollider2D>();
         col.radius = wheel.Radius;

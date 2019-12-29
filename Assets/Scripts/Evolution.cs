@@ -16,7 +16,7 @@ public static class Evolution
             min = Min(min, i.Score);
             score += i.Score;
         }
-        Debug.Log($"Mean Score: {score / population.Individuals.Count}\tMin Score: {min}\tMax Score: {max}");
+        Debug.Log($"Mean Score: {score / population.Individuals.Count}\nMin Score: {min}\nMax Score: {max}");
 
         population.Individuals.Sort((a, b) => (int)Sign(b.Score - a.Score));
         var newPopulation = new List<Genome>();

@@ -33,7 +33,7 @@ public class RoundController : MonoBehaviour {
     float m_LastPosition = 0;
     int m_RestFrames = 0;
 
-    const float k_MaxStep = 1f; // to detect physics glitches
+    const float k_MaxStep = 2; // to detect physics glitches
     const float k_MinStep = 0.0001f;
     const int k_MaxRestFrames = 15; // to detect when not moving
 
@@ -90,6 +90,7 @@ public class RoundController : MonoBehaviour {
             {
                 Debug.Log($"Glitch: {pos} - {m_LastPosition} = {step}");
                 endEarly = true;
+                m_Tournament.IsError = true;
             } else if(m_LastPosition!=m_StartPosition && step <= k_MinStep)
             {
                 m_RestFrames++;

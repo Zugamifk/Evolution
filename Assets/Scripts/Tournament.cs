@@ -20,6 +20,8 @@ public class Tournament {
     public bool IsTestOver => Time > MaxTime || Distance > MaxDistance;
     public bool IsRoundOver => m_CurrentIndex >= Population.Individuals.Count;
 
+    public bool IsError = false;
+
     System.DateTime m_StartTime;
     int m_CurrentIndex = -1;
 
@@ -46,6 +48,7 @@ public class Tournament {
     {
         if (IsRunning) AssignScore();
 
+        IsError = false;
         m_CurrentIndex++;
         m_StartTime = System.DateTime.Now;
         Distance = 0;
@@ -54,7 +57,7 @@ public class Tournament {
     void AssignScore()
     {
         var current = Population.Individuals[m_CurrentIndex];
-        current.Score = Distance / MaxDistance;
+        current.Score = IsError ? 0 : Distance;
         Population.Individuals[m_CurrentIndex] = current;
     }
 }
