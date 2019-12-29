@@ -100,6 +100,9 @@ public static class Evolution
         } else if (value is Genome.Extension)
         {
             return MutateExtension((Genome.Extension)value);
+        } else if(value is Genome.Wheel)
+        {
+            return Mutatewheel((Genome.Wheel)value);
         }
 
         Debug.Log("Value can't mutate! Type is " + value.GetType());
