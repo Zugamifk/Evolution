@@ -49,8 +49,6 @@ public class BodyGraph
             pn = new Vector3(-pn.y, pn.x, 0);
             var p2 = Vector3.Lerp(p0, p1, e.distanceA) + pn * e.distanceB*2;
 
-            Debug.Log($"p0: {p0}, p1: {p1}, p2: {p2}");
-
             v[k_RootPointCount + i] = p2;
             n[k_RootPointCount + i] = Vector3.back;
 
