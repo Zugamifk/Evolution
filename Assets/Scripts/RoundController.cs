@@ -23,6 +23,8 @@ public class RoundController : MonoBehaviour {
     float m_MaxSeconds;
     [SerializeField]
     float m_MaxDistance;
+    [SerializeField]
+    TerrainGenerator m_Terrain;
 
     Tournament m_Tournament;
     Competitor m_Competitor;
@@ -47,6 +49,12 @@ public class RoundController : MonoBehaviour {
         c.gameObject.SetActive(true);
         m_Competitor = c;
 
+        StartRound();
+    }
+
+    void StartRound()
+    {
+        m_Terrain.Generate();
         m_Tournament.StartRound();
         StartTest();
     }
@@ -54,10 +62,12 @@ public class RoundController : MonoBehaviour {
     void StartTest()
     {
         m_LastPosition = m_StartPosition;
-        m_Competitor.transform.position = new Vector3(m_StartPosition, 6, 0);
+        m_Competitor.transform.position = new Vector3(m_StartPosition, m_Terrain.MaxHeight+3, 0);
         m_Competitor.Configure(m_Tournament.Current);
         m_GenerationText.text = $"<size=36>Generation {m_Tournament.Generation}</size>";
         m_IndividualText.text = $"<size=36>Individual {m_Tournament.Individual+1}</size> / {m_TournamentSize}";
+
+        m_Tournament.StartTest();
     }
 
     private void Update()
@@ -98,12 +108,14 @@ public class RoundController : MonoBehaviour {
 
             if (m_Tournament.IsTestOver || endEarly)
             {
-                m_Tournament.StartTest();
                 if (m_Tournament.IsRoundOver)
                 {
-                    m_Tournament.StartRound();
+                    StartRound();
                 }
-                StartTest();
+                else
+                {
+                    StartTest();
+                }
             }
         }
     }

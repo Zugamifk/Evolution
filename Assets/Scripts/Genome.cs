@@ -5,6 +5,9 @@ using System.Reflection;
 
 public struct Genome {
 
+    public const int MinExtensions = 2;
+    public const int MaxExtensions = 10;
+
     public struct Extension
     {
         public uint edgePoint;
@@ -39,7 +42,7 @@ public struct Genome {
         RootPosition2 = Random.value;
         RootPosition3 = Random.value;
 
-        int ec = Random.Range(0, 5);
+        int ec = Random.Range(MinExtensions, MaxExtensions);
         Extensions = new Extension[ec];
         for(int i=0;i<ec;i++)
         {

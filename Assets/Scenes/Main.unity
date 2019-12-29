@@ -148,7 +148,8 @@ MonoBehaviour:
   m_CompetitorTemplate: {fileID: 1263811136}
   m_TournamentSize: 16
   m_MaxSeconds: 10
-  m_MaxDistance: 20
+  m_MaxDistance: 100
+  m_Terrain: {fileID: 983732712}
 --- !u!4 &569088367
 Transform:
   m_ObjectHideFlags: 0
@@ -479,7 +480,8 @@ MonoBehaviour:
   m_Collider: {fileID: 983732711}
   m_MeshFilter: {fileID: 2070942329}
   m_PointCount: 2000
-  m_Variance: 0.4
+  m_Variance: 1
+  m_MaxHeight: 25
 --- !u!4 &983732713
 Transform:
   m_ObjectHideFlags: 0
@@ -542,7 +544,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10.48
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

@@ -14,9 +14,11 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField]
     float m_MaxHeight = 5;
 
+    public float MaxHeight => m_MaxHeight;
+
     float[] m_Points;
 
-    private void Start()
+    public void Generate()
     {
         m_Points = new float[m_PointCount];
         var surface = new Vector2[m_PointCount];
