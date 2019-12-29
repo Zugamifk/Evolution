@@ -90,9 +90,16 @@ public static class Evolution
         if (value is float)
         {
             return MutateFloat((float)value);
-        } else if (value is Color32)
+        } else if(value is int)
+        {
+            return MutateInt((int)value);
+        }
+        else if (value is Color32)
         {
             return MutateColor32((Color32)value);
+        } else if (value is Genome.Extension)
+        {
+            return MutateExtension((Genome.Extension)value);
         }
 
         Debug.Log("Value can't mutate! Type is " + value.GetType());
@@ -113,5 +120,20 @@ public static class Evolution
     static byte MutateByte(byte value)
     {
         return (byte)(value ^ (1 << Random.Range(0, 8)));
+    }
+
+    static int MutateInt(int value)
+    {
+        return value ^ (1 << Random.Range(0, 32));
+    }
+
+    static Genome.Extension MutateExtension(Genome.Extension value)
+    {
+        return new Genome.Extension()
+        {
+            edgePoint = MutateInt(value.edgePoint),
+            distanceA = MutateFloat(value.distanceA),
+            distanceB = MutateFloat(value.distanceB)
+        };
     }
 }

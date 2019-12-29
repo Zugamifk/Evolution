@@ -17,8 +17,9 @@ public class BodyBuilder : CompetitorPartBuilder
     public CompetitorPart BuildPart(CompetitorModel model, CompetitorPart partTemplate)
     {
         var body = InstantiatePart(partTemplate);
-        var mesh = model.BodyGraph.GetMesh();
+        var mesh = model.BodyGraph.GetMesh(model.Translator);
         body.MeshFilter.mesh = mesh;
+        body.MeshFilter.GetComponent<MeshRenderer>().material.color = model.Translator.BodyColor;
 
         var poly = body.gameObject.AddComponent<PolygonCollider2D>();
         poly.points = model.BodyGraph.Perimeter;

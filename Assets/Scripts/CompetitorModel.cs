@@ -9,7 +9,6 @@ public class CompetitorModel {
     List<Vector2> m_JointAnchors = new List<Vector2>();
 
     public Genome Genome => m_Genome;
-    public List<Vector2> JointAnchors => m_JointAnchors;
     public Translator Translator;
     public BodyGraph BodyGraph;
 

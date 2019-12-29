@@ -1,52 +1,28 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static UnityEngine.Mathf;
 
 public class BodyGraph
 {
-
     const int k_RootPointCount = 3;
 
-    public struct Extension
-    {
-        public int edgePointA, edgePointB;
-        public float distanceA, distanceB;
-    }
-
-    public Vector2[] RootPoints;
-    public int[] RootEdges = new[] {
-        0,1,
-        1,2,
-        2,0
-    };
-
-    public List<Extension> Extensions = new List<Extension>();
     public Vector2[] Perimeter;
 
-    public BodyGraph()
-    {
-        var c = 2 * PI;
-        RootPoints = new[]{
-            new Vector2(2*Sin(c*Random.value/3f), 2*Cos(c*Random.value/3f)),
-            new Vector2(2*Sin(c*(1f/3f+Random.value/3f)), 2*Cos(c*(1f/3f+Random.value/3f))),
-            new Vector2(2*Sin(c*(2f/3f+Random.value/3f)), 2*Cos(c*(2f/3f+Random.value/3f)))
-        };
-    }
-
-    public Mesh GetMesh()
+    public Mesh GetMesh(Translator translator)
     {
         var m = new Mesh();
         var fe = new List<int>();
 
-        var np = k_RootPointCount + Extensions.Count;
+        var np = k_RootPointCount + translator.Extensions.Length;
         var v = new Vector3[np];
         var n = new Vector3[np];
-        var nt = 3 * (Extensions.Count + 1);
+        var nt = 3 * (translator.Extensions.Length + 1);
         var t = new int[nt];
 
-        v[0] = RootPoints[0];
-        v[1] = RootPoints[1];
-        v[2] = RootPoints[2];
+        v[0] = translator.RootPoints[0];
+        v[1] = translator.RootPoints[1];
+        v[2] = translator.RootPoints[2];
 
         n[0] = Vector3.back;
         n[1] = Vector3.back;
@@ -60,25 +36,30 @@ public class BodyGraph
         fe.Add(1);
         fe.Add(2);
 
-        for (int i = 0; i < Extensions.Count; i++)
+        for (int i = 0; i < translator.Extensions.Length; i++)
         {
-            var e = Extensions[i];
-            var p0 = v[e.edgePointA];
-            var p1 = v[e.edgePointB];
+            var e = translator.Extensions[i];
+            var ea = e.edgePoint % fe.Count;
+            var eb = (e.edgePoint + 1) % fe.Count;
+            if (ea == eb) continue;
+
+            var p0 = v[fe[ea]];
+            var p1 = v[fe[eb]];
             var pn = (p1 - p0).normalized;
             pn = new Vector3(-pn.y, pn.x, 0);
-            var p2 = Vector3.Lerp(p0, p1, e.distanceA) + pn * e.distanceB;
+            var p2 = Vector3.Lerp(p0, p1, e.distanceA) + pn * e.distanceB*2;
+
+            Debug.Log($"p0: {p0}, p1: {p1}, p2: {p2}");
 
             v[k_RootPointCount + i] = p2;
             n[k_RootPointCount + i] = Vector3.back;
 
-            var ei = fe.IndexOf(e.edgePointB);
-            fe.Insert(ei, k_RootPointCount + i);
-
             var vi = k_RootPointCount + i * 3;
-            t[vi] = e.edgePointA;
-            t[vi + 1] = e.edgePointB;
-            t[vi + 2] = k_RootPointCount + i;
+            t[vi] = fe[ea];
+            t[vi + 1] = k_RootPointCount + i;
+            t[vi + 2] = fe[eb];
+
+            fe.Insert(eb, k_RootPointCount + i);
         }
 
         m.vertices = v;
