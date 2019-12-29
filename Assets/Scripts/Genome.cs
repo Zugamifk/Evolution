@@ -8,6 +8,9 @@ public struct Genome {
     public const int MinExtensions = 2;
     public const int MaxExtensions = 10;
 
+    public const int MinWheels = 2;
+    public const int MaxWheels = 4;
+
     public struct Extension
     {
         public uint edgePoint;
@@ -31,8 +34,7 @@ public struct Genome {
 
     public Color32 BodyColor;
 
-    public Wheel Wheel1;
-    public Wheel Wheel2;
+    public Wheel[] Wheels;
 
     public Genome(int seed)
     {
@@ -42,7 +44,7 @@ public struct Genome {
         RootPosition2 = Random.value;
         RootPosition3 = Random.value;
 
-        int ec = Random.Range(MinExtensions, MaxExtensions);
+        int ec = Random.Range(MinExtensions, MaxExtensions+1);
         Extensions = new Extension[ec];
         for(int i=0;i<ec;i++)
         {
@@ -51,8 +53,12 @@ public struct Genome {
 
         BodyColor = RandomColor();
 
-        Wheel1 = RandomWheel();
-        Wheel2 = RandomWheel();
+        int wc = Random.Range(MinWheels, MaxWheels + 1);
+        Wheels = new Wheel[wc];
+        for(int i=0;i<wc;i++)
+        {
+            Wheels[i] = RandomWheel();
+        }
     }
 
     public static object GetRandom(System.Type type)

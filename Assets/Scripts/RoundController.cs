@@ -34,8 +34,9 @@ public class RoundController : MonoBehaviour {
     int m_RestFrames = 0;
 
     const float k_MaxStep = 2; // to detect physics glitches
-    const float k_MinStep = 0.0001f;
+    const float k_MinStep = 0.001f;
     const int k_MaxRestFrames = 15; // to detect when not moving
+    const float k_MaxRetreat = -5; // to detect going backwards
 
     const string k_TimeFormat = @"m\:ss\.f";
     const string k_DistanceFormat = @"0.##";
@@ -88,7 +89,6 @@ public class RoundController : MonoBehaviour {
             bool endEarly = false;
             if (step > k_MaxStep)
             {
-                Debug.Log($"Glitch: {pos} - {m_LastPosition} = {step}");
                 endEarly = true;
                 m_Tournament.IsError = true;
             } else if(m_LastPosition!=m_StartPosition && step <= k_MinStep)
@@ -96,11 +96,15 @@ public class RoundController : MonoBehaviour {
                 m_RestFrames++;
                 if(m_RestFrames > k_MaxRestFrames)
                 {
-                    Debug.Log("Stuck!");
                     endEarly = true;
                     m_RestFrames = 0;
                 }
-            } else
+            } else if(m_Tournament.Distance < k_MaxRetreat)
+            {
+                endEarly = true;
+                m_Tournament.IsError = true;
+            }
+            else
             {
                 m_RestFrames = 0;
             }

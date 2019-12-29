@@ -25,8 +25,7 @@ public class Translator {
 
     public Color32 BodyColor => m_Genome.BodyColor;
 
-    public Genome.Wheel Wheel1;
-    public Genome.Wheel Wheel2;
+    public Genome.Wheel[] Wheels;
 
     public Translator(Genome genome)
     {
@@ -46,22 +45,18 @@ public class Translator {
             Extensions[i].distanceB = Lerp(k_MinExtensionDistance, k_MaxExtensionDistance, Extensions[i].distanceB);
         }
 
-        Wheel1 = new Genome.Wheel()
+        Wheels = new Genome.Wheel[genome.Wheels.Length];
+        for(int i=0;i<Wheels.Length;i++)
         {
-            Anchor = genome.Wheel1.Anchor,
-            Radius = Lerp(k_MinWheelSize, k_MaxWheelSize, genome.Wheel1.Radius),
-            MaxTorque = Lerp(k_MinTorque, k_MaxTorque, genome.Wheel1.MaxTorque),
-            MaxSpeed = Lerp(k_MinSpeed, k_MaxSpeed, genome.Wheel1.MaxSpeed),
-            Color = genome.Wheel1.Color
-        };
-
-        Wheel2 = new Genome.Wheel()
-        {
-            Anchor = genome.Wheel2.Anchor,
-            Radius = Lerp(k_MinWheelSize, k_MaxWheelSize, genome.Wheel2.Radius),
-            MaxTorque = Lerp(k_MinTorque, k_MaxTorque, genome.Wheel2.MaxTorque),
-            MaxSpeed = Lerp(k_MinSpeed, k_MaxSpeed, genome.Wheel2.MaxSpeed),
-            Color = genome.Wheel2.Color
-        };
+            var w = genome.Wheels[i];
+            Wheels[i] = new Genome.Wheel()
+            {
+                Anchor = w.Anchor,
+                Radius = Lerp(k_MinWheelSize, k_MaxWheelSize, w.Radius),
+                MaxTorque = Lerp(k_MinTorque, k_MaxTorque, w.MaxTorque),
+                MaxSpeed = Lerp(k_MinSpeed, k_MaxSpeed, w.MaxSpeed),
+                Color = w.Color
+            };
+        }
     }
 }

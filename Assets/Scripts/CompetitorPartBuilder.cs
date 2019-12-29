@@ -65,7 +65,7 @@ public class WheelBuilder : CompetitorPartBuilder
         return m;
     }
 
-    public CompetitorPart BuildPart(CompetitorModel model, CompetitorPart partTemplate, Genome.Wheel wheel)
+    public CompetitorPart BuildPart(CompetitorPart partTemplate, Genome.Wheel wheel)
     {
         var part = InstantiatePart(partTemplate);
         

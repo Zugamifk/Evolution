@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CompetitorBuilder {
+public class CompetitorBuilder
+{
 
     CompetitorPart m_PartTemplate;
 
@@ -16,29 +15,33 @@ public class CompetitorBuilder {
         var bb = new BodyBuilder();
         var body = bb.BuildPart(model, m_PartTemplate);
 
-        var pn = model.BodyGraph.Perimeter.Length;
-
-        // add wheels
         var wb = new WheelBuilder();
-        var wheel = wb.BuildPart(model, m_PartTemplate, model.Translator.Wheel1);
-        wheel.transform.SetParent(body.transform);
-        var joint = wheel.GetComponent<WheelJoint2D>();
+        var wc = Mathf.Min(model.Translator.Wheels.Length, model.BodyGraph.Perimeter.Length);
+        for (int i = 0; i < wc; i++)
+        {
+            AddWheel(model.Translator.Wheels[i], wb, body.transform, model);
+        }
+
+        return body.gameObject;
+    }
+
+    void AddWheel(Genome.Wheel wheel, WheelBuilder builder, Transform body, CompetitorModel model)
+    {
+        var part = builder.BuildPart(m_PartTemplate, wheel);
+        part.transform.SetParent(body.transform);
+
+        var joint = part.GetComponent<WheelJoint2D>();
         var rb = body.gameObject.GetComponent<Rigidbody2D>();
         rb.mass = 0.1f;
         joint.connectedBody = rb;
-        var wa1 = model.Translator.Wheel1.Anchor % pn;
-        joint.connectedAnchor = model.BodyGraph.Perimeter[wa1];
 
-        wheel = wb.BuildPart(model, m_PartTemplate, model.Translator.Wheel2);
-        wheel.transform.SetParent(body.transform);
-        joint = wheel.GetComponent<WheelJoint2D>();
-        rb = body.gameObject.GetComponent<Rigidbody2D>();
-        rb.mass = 0.1f;
-        joint.connectedBody = rb;
-        var wa2 = model.Translator.Wheel2.Anchor % pn;
-        if (wa1 == wa2) wa2 = (wa2 + 1) % pn;
-        joint.connectedAnchor = model.BodyGraph.Perimeter[wa2];
-
-        return body.gameObject;
+        var pn = model.BodyGraph.Perimeter.Length;
+        int wa = (int)wheel.Anchor % pn;
+        while (model.ConnectedWheels.Contains(wa))
+        {
+            wa = (wa + 1) % pn;
+        }
+        joint.connectedAnchor = model.BodyGraph.Perimeter[wa];
+        model.ConnectedWheels.Add(wa);
     }
 }

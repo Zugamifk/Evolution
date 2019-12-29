@@ -11,12 +11,14 @@ public class CompetitorModel {
     public Genome Genome => m_Genome;
     public Translator Translator;
     public BodyGraph BodyGraph;
+    public List<int> ConnectedWheels;
 
     public CompetitorModel(Genome genome)
     {
         m_Genome = genome;
         Translator = new Translator(genome);
         BodyGraph = new BodyGraph();
+        ConnectedWheels = new List<int>();
     }
 
     public void GenerateModel()
