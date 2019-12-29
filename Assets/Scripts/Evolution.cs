@@ -29,8 +29,14 @@ public static class Evolution
             }
             else
             {
-                var mom = population.Individuals[Random.Range(0, keepCount)].Genome;
-                var dad = population.Individuals[Random.Range(0, keepCount)].Genome;
+                var mi = Random.Range(0, keepCount);
+                var di = mi;
+                while(mi==di)
+                {
+                    di = Random.Range(0, keepCount);
+                }
+                var mom = population.Individuals[mi].Genome;
+                var dad = population.Individuals[di].Genome;
                 var child = Crossover(mom, dad);
                 child = Mutate(child);
                 newPopulation.Add(child);
