@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 776912093}
   - component: {fileID: 776912091}
   - component: {fileID: 776912092}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -691,7 +691,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1263811135}
   - component: {fileID: 1263811136}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Competitor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -769,7 +769,7 @@ GameObject:
   - component: {fileID: 1760994886}
   - component: {fileID: 1760994885}
   - component: {fileID: 1760994887}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Part
   m_TagString: Untagged
   m_Icon: {fileID: 0}

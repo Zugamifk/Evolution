@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class RoundController : MonoBehaviour {
 
+    const float k_StartPosition = 25;
+
     [SerializeField]
     Camera m_Camera;
     [SerializeField]
@@ -27,16 +29,8 @@ public class RoundController : MonoBehaviour {
     TerrainGenerator m_Terrain;
 
     Tournament m_Tournament;
-    Competitor m_Competitor;
-
-    float m_StartPosition = 25;
-    float m_LastPosition = 0;
-    int m_RestFrames = 0;
-
-    const float k_MaxStep = 2; // to detect physics glitches
-    const float k_MinStep = 0.001f;
-    const int k_MaxRestFrames = 15; // to detect when not moving
-    const float k_MaxRetreat = -5; // to detect going backwards
+    Competitor[] m_Competitors;
+    int m_Watched;
 
     const string k_TimeFormat = @"m\:ss\.f";
     const string k_DistanceFormat = @"0.##";
@@ -46,9 +40,13 @@ public class RoundController : MonoBehaviour {
         Time.timeScale = 2;
         m_Tournament = new Tournament(m_TournamentSize, m_MaxDistance, m_MaxSeconds);
 
-        var c = Instantiate(m_CompetitorTemplate);
-        c.gameObject.SetActive(true);
-        m_Competitor = c;
+        m_Competitors = new Competitor[m_Tournament.States.Length];
+        for (int i = 0; i < m_Tournament.States.Length; i++)
+        {
+            var c = Instantiate(m_CompetitorTemplate);
+            c.gameObject.SetActive(true);
+            m_Competitors[i] = c;
+        }
 
         StartRound();
     }
@@ -57,71 +55,49 @@ public class RoundController : MonoBehaviour {
     {
         m_Terrain.Generate();
         m_Tournament.StartRound();
-        StartTest();
-    }
+        for(int i=0;i<m_Tournament.States.Length;i++)
+        {
+            m_Competitors[i].Configure(m_Tournament.Population.Individuals[i].Genome);
+            m_Competitors[i].MainBody.transform.position = new Vector3(k_StartPosition, m_Terrain.MaxHeight + 3, 0);
+            m_Competitors[i].gameObject.SetActive(true);
+            m_Tournament.States[i].Initialize(k_StartPosition);
+        }
 
-    void StartTest()
-    {
-        m_LastPosition = m_StartPosition;
-        m_Competitor.transform.position = new Vector3(m_StartPosition, m_Terrain.MaxHeight+3, 0);
-        m_Competitor.Configure(m_Tournament.Current);
         m_GenerationText.text = $"<size=36>Generation {m_Tournament.Generation}</size>";
-        m_IndividualText.text = $"<size=36>Individual {m_Tournament.Individual+1}</size> / {m_TournamentSize}";
-
-        m_Tournament.StartTest();
     }
 
     private void Update()
     {
-        var p = m_Competitor.MainBody.transform.position;
-        p.z = -10;
-        m_Camera.transform.position = p;
-
-        m_TimeText.text = $"<size=36>{m_Tournament.Time.ToString(k_TimeFormat)}</size> / {m_Tournament.MaxTime.ToString(k_TimeFormat)}";
-        m_DistanceText.text = $"<size=36>{m_Tournament.Distance.ToString(k_DistanceFormat)}</size> / {m_Tournament.MaxDistance.ToString(k_DistanceFormat)}";
-
-        if (m_Tournament.IsRunning)
+        int running = 0;
+        float farthest = 0;
+        for(int i=0;i<m_Tournament.States.Length;i++)
         {
-            var pos = m_Competitor.MainBody.transform.position.x;
-            m_Tournament.Distance = pos - m_StartPosition;
-
-            var step = Mathf.Abs(pos - m_LastPosition);
-            bool endEarly = false;
-            if (step > k_MaxStep)
+            var s = m_Tournament.States[i];
+            if (s.IsRunning)
             {
-                endEarly = true;
-                m_Tournament.IsError = true;
-            } else if(m_LastPosition!=m_StartPosition && step <= k_MinStep)
-            {
-                m_RestFrames++;
-                if(m_RestFrames > k_MaxRestFrames)
+                running++;
+                if(s.Distance > farthest)
                 {
-                    endEarly = true;
-                    m_RestFrames = 0;
+                    farthest = s.Distance;
+                    m_Watched = i;
                 }
-            } else if(m_Tournament.Distance < k_MaxRetreat)
-            {
-                endEarly = true;
-                m_Tournament.IsError = true;
-            }
-            else
-            {
-                m_RestFrames = 0;
+                s.Update(m_Competitors[i].MainBody.transform.position.x);
             }
 
-            m_LastPosition = pos;
-
-            if (m_Tournament.IsTestOver || endEarly)
+            if(!s.IsRunning)
             {
-                if (m_Tournament.IsRoundOver)
-                {
-                    StartRound();
-                }
-                else
-                {
-                    StartTest();
-                }
+                m_Competitors[i].gameObject.SetActive(false);
             }
         }
+
+        if (!m_Tournament.IsRunning) StartRound();
+
+        m_IndividualText.text = $"<size=36>{running}</size> / {m_TournamentSize} individuals";
+        m_TimeText.text = $"<size=36>{m_Tournament.Time.ToString(k_TimeFormat)}</size> / {m_Tournament.MaxTime.ToString(k_TimeFormat)}";
+        m_DistanceText.text = $"<size=36>Best: {farthest.ToString(k_DistanceFormat)}</size> / {m_Tournament.MaxDistance.ToString(k_DistanceFormat)}";
+
+        var pos = m_Competitors[m_Watched].MainBody.transform.position;
+        pos.z = -10;
+        m_Camera.transform.position = pos;
     }
 }

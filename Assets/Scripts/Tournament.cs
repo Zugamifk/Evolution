@@ -1,29 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Tournament {
 
     public Population Population;
-    public Genome Current => Population.Individuals[m_CurrentIndex].Genome;
+    public CompetitorState[] States;
 
     public System.TimeSpan Time => System.DateTime.Now - m_StartTime;
     public System.TimeSpan MaxTime;
 
-    public int Individual => m_CurrentIndex;
     public int Generation;
 
-    public float Distance;
     public float MaxDistance;
 
-    public bool IsRunning => m_CurrentIndex >= 0;
-    public bool IsTestOver => Time > MaxTime || Distance > MaxDistance;
-    public bool IsRoundOver => m_CurrentIndex >= Population.Individuals.Count;
-
-    public bool IsError = false;
-
     System.DateTime m_StartTime;
-    int m_CurrentIndex = -1;
+
+    public bool IsRunning => States != null && States.Any(s=>s.IsRunning) && Time < MaxTime;
 
     public Tournament(int maxCompetitors, float maxDistance, float maxSeconds)
     {
@@ -31,33 +25,26 @@ public class Tournament {
         Population = new Population(maxCompetitors);
         MaxTime = System.TimeSpan.FromSeconds(maxSeconds);
         MaxDistance = maxDistance;
+        States = new CompetitorState[maxCompetitors];
+        for(int i=0;i<maxCompetitors;i++)
+        {
+            States[i] = new CompetitorState();
+        }
     }
 
     public void StartRound()
     {
         if(IsRunning)
         {
+            for(int i=0;i<States.Length;i++)
+            {
+                var individual = Population.Individuals[i];
+                individual.Score = States[i].HadError ? 0 : States[i].Distance;
+                Population.Individuals[i] = individual;
+            }
             Evolution.DoSelection(Population);
         }
         Generation++;
-        m_CurrentIndex = -1;
-        StartTest();
-    }
-
-    public void StartTest()
-    {
-        if (IsRunning) AssignScore();
-
-        IsError = false;
-        m_CurrentIndex++;
         m_StartTime = System.DateTime.Now;
-        Distance = 0;
-    }
-
-    void AssignScore()
-    {
-        var current = Population.Individuals[m_CurrentIndex];
-        current.Score = IsError ? 0 : Distance;
-        Population.Individuals[m_CurrentIndex] = current;
     }
 }
