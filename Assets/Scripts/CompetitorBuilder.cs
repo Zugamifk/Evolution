@@ -20,18 +20,18 @@ public class CompetitorBuilder {
 
         // add wheels
         var wb = new WheelBuilder();
-        var wheel = wb.BuildPart(model, m_PartTemplate, 0);
+        var wheel = wb.BuildPart(model, m_PartTemplate, model.Translator.Wheel1);
         wheel.transform.SetParent(body.transform);
         var joint = wheel.GetComponent<WheelJoint2D>();
         joint.connectedBody = body.gameObject.GetComponent<Rigidbody2D>();
-        var wa1 = model.Translator.Wheel1Anchor % pn;
+        var wa1 = model.Translator.Wheel1.Anchor % pn;
         joint.connectedAnchor = model.BodyGraph.Perimeter[wa1];
 
-        wheel = wb.BuildPart(model, m_PartTemplate, 1);
+        wheel = wb.BuildPart(model, m_PartTemplate, model.Translator.Wheel2);
         wheel.transform.SetParent(body.transform);
         joint = wheel.GetComponent<WheelJoint2D>();
         joint.connectedBody = body.gameObject.GetComponent<Rigidbody2D>();
-        var wa2 = model.Translator.Wheel2Anchor % pn;
+        var wa2 = model.Translator.Wheel2.Anchor % pn;
         if (wa1 == wa2) wa2 = (wa2 + 1) % pn;
         joint.connectedAnchor = model.BodyGraph.Perimeter[wa2];
 

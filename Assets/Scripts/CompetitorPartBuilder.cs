@@ -63,35 +63,23 @@ public class WheelBuilder : CompetitorPartBuilder
         return m;
     }
 
-    public CompetitorPart BuildPart(CompetitorModel model, CompetitorPart partTemplate, int index)
+    public CompetitorPart BuildPart(CompetitorModel model, CompetitorPart partTemplate, Genome.Wheel wheel)
     {
-        var wheel = InstantiatePart(partTemplate);
-        var radius = 1f;
-        switch (index)
-        {
-            case 0: radius = model.Translator.Wheel1Radius; break;
-            case 1: radius = model.Translator.Wheel2Radius; break;
-        }
-        var mesh = BuildMesh(radius);
-        wheel.MeshFilter.mesh = mesh;
+        var part = InstantiatePart(partTemplate);
+        
+        var mesh = BuildMesh(wheel.Radius);
+        part.MeshFilter.mesh = mesh;
+        part.MeshFilter.GetComponent<MeshRenderer>().material.color = wheel.Color;
 
-        var color = Color.white;
-        switch (index)
-        {
-            case 0: color = model.Translator.Wheel1Color; break;
-            case 1: color = model.Translator.Wheel2Color; break;
-        }
-        wheel.MeshFilter.GetComponent<MeshRenderer>().material.color = color;
+        var col = part.gameObject.AddComponent<CircleCollider2D>();
+        col.radius = wheel.Radius;
 
-        var col = wheel.gameObject.AddComponent<CircleCollider2D>();
-        col.radius = radius;
-
-        var joint = wheel.gameObject.AddComponent<WheelJoint2D>();
+        var joint = part.gameObject.AddComponent<WheelJoint2D>();
         joint.enableCollision = false;
 
-        joint.motor = new JointMotor2D() { motorSpeed = 500, maxMotorTorque = 300 };
+        joint.motor = new JointMotor2D() { motorSpeed = wheel.MaxSpeed, maxMotorTorque = wheel.MaxTorque };
         joint.suspension = new JointSuspension2D() { dampingRatio = 1, frequency = 100 };
 
-        return wheel;
+        return part;
     }
 }

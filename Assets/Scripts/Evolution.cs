@@ -136,4 +136,16 @@ public static class Evolution
             distanceB = MutateFloat(value.distanceB)
         };
     }
+
+    static Genome.Wheel Mutatewheel(Genome.Wheel value)
+    {
+        return new Genome.Wheel()
+        {
+            Anchor = MutateInt(value.Anchor),
+            Radius = MutateFloat(value.Radius),
+            MaxTorque = MutateFloat(value.MaxTorque),
+            MaxSpeed = MutateFloat(value.MaxSpeed),
+            Color = MutateColor32(value.Color)
+        };
+    }
 }

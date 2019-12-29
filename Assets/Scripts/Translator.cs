@@ -6,7 +6,13 @@ using static UnityEngine.Mathf;
 public class Translator {
 
     const float k_MinWheelSize = .2f;
-    const float k_MaxWheelSize = .8f;
+    const float k_MaxWheelSize = 1.5f;
+
+    const float k_MinTorque = 200;
+    const float k_MaxTorque = 500;
+
+    const float k_MinSpeed = 500;
+    const float k_MaxSpeed = 1000;
 
     const float k_MinExtensionDistance = 1;
     const float k_MaxExtensionDistance = 2;
@@ -19,13 +25,8 @@ public class Translator {
 
     public Color32 BodyColor => m_Genome.BodyColor;
 
-    public int Wheel1Anchor => m_Genome.Wheel1Anchor;
-    public float Wheel1Radius => Lerp(k_MinWheelSize, k_MaxWheelSize, m_Genome.Wheel1Radius);
-    public Color32 Wheel1Color => m_Genome.Wheel1Color;
-
-    public int Wheel2Anchor => m_Genome.Wheel2Anchor;
-    public float Wheel2Radius => Lerp(k_MinWheelSize, k_MaxWheelSize, m_Genome.Wheel2Radius);
-    public Color32 Wheel2Color => m_Genome.Wheel2Color;
+    public Genome.Wheel Wheel1;
+    public Genome.Wheel Wheel2;
 
     public Translator(Genome genome)
     {
@@ -44,5 +45,23 @@ public class Translator {
             Extensions[i] = genome.Extensions;
             Extensions[i].distanceB = Lerp(k_MinExtensionDistance, k_MaxExtensionDistance, Extensions[i].distanceB);
         }
+
+        Wheel1 = new Genome.Wheel()
+        {
+            Anchor = genome.Wheel1.Anchor,
+            Radius = Lerp(k_MinWheelSize, k_MaxWheelSize, genome.Wheel1.Radius),
+            MaxTorque = Lerp(k_MinTorque, k_MaxTorque, genome.Wheel1.MaxTorque),
+            MaxSpeed = Lerp(k_MinSpeed, k_MaxSpeed, genome.Wheel1.MaxSpeed),
+            Color = genome.Wheel1.Color
+        };
+
+        Wheel2 = new Genome.Wheel()
+        {
+            Anchor = genome.Wheel2.Anchor,
+            Radius = Lerp(k_MinWheelSize, k_MaxWheelSize, genome.Wheel2.Radius),
+            MaxTorque = Lerp(k_MinTorque, k_MaxTorque, genome.Wheel2.MaxTorque),
+            MaxSpeed = Lerp(k_MinSpeed, k_MaxSpeed, genome.Wheel2.MaxSpeed),
+            Color = genome.Wheel2.Color
+        };
     }
 }

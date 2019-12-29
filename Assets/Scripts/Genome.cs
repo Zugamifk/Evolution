@@ -11,6 +11,15 @@ public struct Genome {
         public float distanceA, distanceB;
     }
 
+    public struct Wheel
+    {
+        public int Anchor;
+        public float Radius;
+        public float MaxSpeed;
+        public float MaxTorque;
+        public Color32 Color;
+    }
+
     public float RootPosition1;
     public float RootPosition2;
     public float RootPosition3;
@@ -19,12 +28,8 @@ public struct Genome {
 
     public Color32 BodyColor;
 
-    public int Wheel1Anchor;
-    public float Wheel1Radius;
-    public Color32 Wheel1Color;
-    public int Wheel2Anchor;
-    public float Wheel2Radius;
-    public Color32 Wheel2Color;
+    public Wheel Wheel1;
+    public Wheel Wheel2;
 
     public Genome(int seed)
     {
@@ -43,12 +48,22 @@ public struct Genome {
 
         BodyColor = RandomColor();
 
-        Wheel1Anchor = Random.Range(0, 99999);
-        Wheel1Radius = Random.value;
-        Wheel1Color = RandomColor();
-        Wheel2Anchor = Random.Range(0, 99999);
-        Wheel2Radius = Random.value;
-        Wheel2Color = RandomColor();
+        Wheel1 = new Wheel()
+        {
+            Anchor = Random.Range(0, 99999),
+            Radius = Random.value,
+            MaxSpeed = Random.value,
+            MaxTorque = Random.value
+        };
+
+        Wheel2 = new Wheel()
+        {
+            Anchor = Random.Range(0, 99999),
+            Radius = Random.value,
+            Color = RandomColor(),
+            MaxSpeed = Random.value,
+            MaxTorque = Random.value
+        };
     }
 
     static Color32 RandomColor()
