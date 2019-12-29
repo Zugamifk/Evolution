@@ -87,12 +87,15 @@ public static class Evolution
 
     static object MutateValue(object value)
     {
-        if (value is float)
+        if(value is System.Array)
+        {
+            return MutateArray((System.Array)value, value.GetType().GetElementType());
+        }else if (value is float)
         {
             return MutateFloat((float)value);
         } else if(value is int)
         {
-            return MutateInt((int)value);
+            return MutateInt((uint)value);
         }
         else if (value is Color32)
         {
@@ -106,6 +109,23 @@ public static class Evolution
         }
 
         Debug.Log("Value can't mutate! Type is " + value.GetType());
+        return value;
+    }
+
+    static System.Array MutateArray(System.Array value, System.Type elementType)
+    {
+        var l = Max(0, value.Length + (Random.value > .5f ? 0 : Random.value > .5f ? 1 : -1));
+        var a = new object[l];
+        for (int i = 0; i < l; i++)
+        {
+            if (i < value.Length)
+            {
+                a[i] = MutateValue(value.GetValue(i));
+            } else
+            {
+                a[i] = Genome.GetRandom(elementType);
+            }
+        }
         return value;
     }
 
@@ -125,9 +145,9 @@ public static class Evolution
         return (byte)(value ^ (1 << Random.Range(0, 8)));
     }
 
-    static int MutateInt(int value)
+    static uint MutateInt(uint value)
     {
-        return value ^ (1 << Random.Range(0, 32));
+        return value ^ (1u << Random.Range(0, 32));
     }
 
     static Genome.Extension MutateExtension(Genome.Extension value)

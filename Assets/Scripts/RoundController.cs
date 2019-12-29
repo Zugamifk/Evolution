@@ -40,6 +40,7 @@ public class RoundController : MonoBehaviour {
 
     private void Start()
     {
+        Time.timeScale = 2;
         m_Tournament = new Tournament(m_TournamentSize, m_MaxDistance, m_MaxSeconds);
 
         var c = Instantiate(m_CompetitorTemplate);

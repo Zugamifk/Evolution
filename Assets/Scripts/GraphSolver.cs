@@ -39,8 +39,8 @@ public class BodyGraph
         for (int i = 0; i < translator.Extensions.Length; i++)
         {
             var e = translator.Extensions[i];
-            var ea = e.edgePoint % fe.Count;
-            var eb = (e.edgePoint + 1) % fe.Count;
+            var ea = (int)(e.edgePoint) % fe.Count;
+            var eb = (int)(e.edgePoint + 1) % fe.Count;
             if (ea == eb) continue;
 
             var p0 = v[fe[ea]];

@@ -7,13 +7,13 @@ public struct Genome {
 
     public struct Extension
     {
-        public int edgePoint;
+        public uint edgePoint;
         public float distanceA, distanceB;
     }
 
     public struct Wheel
     {
-        public int Anchor;
+        public uint Anchor;
         public float Radius;
         public float MaxSpeed;
         public float MaxTorque;
@@ -24,7 +24,7 @@ public struct Genome {
     public float RootPosition2;
     public float RootPosition3;
 
-    public Extension Extensions;
+    public Extension[] Extensions;
 
     public Color32 BodyColor;
 
@@ -39,36 +39,75 @@ public struct Genome {
         RootPosition2 = Random.value;
         RootPosition3 = Random.value;
 
-        Extensions = new Extension()
+        int ec = Random.Range(0, 5);
+        Extensions = new Extension[ec];
+        for(int i=0;i<ec;i++)
         {
-            edgePoint = Random.Range(0, 100000),
-            distanceA = Random.value,
-            distanceB = Random.value
-        };
+            Extensions[i] = RandomExtension();
+        }
 
         BodyColor = RandomColor();
 
-        Wheel1 = new Wheel()
-        {
-            Anchor = Random.Range(0, 99999),
-            Radius = Random.value,
-            MaxSpeed = Random.value,
-            MaxTorque = Random.value
-        };
+        Wheel1 = RandomWheel();
+        Wheel2 = RandomWheel();
+    }
 
-        Wheel2 = new Wheel()
+    public static object GetRandom(System.Type type)
+    {
+        /*if (value is System.Array)
         {
-            Anchor = Random.Range(0, 99999),
-            Radius = Random.value,
-            Color = RandomColor(),
-            MaxSpeed = Random.value,
-            MaxTorque = Random.value
-        };
+            return MutateArray((System.Array)value);
+        }
+        else*/ 
+        if (type == typeof(float))
+        {
+            return Random.value;
+        }
+        else if (type == typeof(int))
+        {
+            return Random.Range(0,100000);
+        }
+        else if (type == typeof(Color32))
+        {
+            return RandomColor();
+        }
+        else if (type == typeof(Extension))
+        {
+            return RandomExtension();
+        }
+        else if (type == typeof(Wheel))
+        {
+            return RandomWheel();
+        }
+
+        return null;
     }
 
     static Color32 RandomColor()
     {
         return new Color32((byte)Random.Range(0, 256), (byte)Random.Range(0, 256), (byte)Random.Range(0, 256), 255);
+    }
+
+    static Extension RandomExtension()
+    {
+        return new Extension()
+        {
+            edgePoint = (uint)Random.Range(0, 100000),
+            distanceA = Random.value,
+            distanceB = Random.value
+        };
+    }
+
+    static Wheel RandomWheel()
+    {
+        return new Wheel()
+        {
+            Anchor = (uint)Random.Range(0, 99999),
+            Radius = Random.value,
+            Color = RandomColor(),
+            MaxSpeed = Random.value,
+            MaxTorque = Random.value
+        };
     }
 
     // enumerate fields

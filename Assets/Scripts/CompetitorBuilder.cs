@@ -23,14 +23,18 @@ public class CompetitorBuilder {
         var wheel = wb.BuildPart(model, m_PartTemplate, model.Translator.Wheel1);
         wheel.transform.SetParent(body.transform);
         var joint = wheel.GetComponent<WheelJoint2D>();
-        joint.connectedBody = body.gameObject.GetComponent<Rigidbody2D>();
+        var rb = body.gameObject.GetComponent<Rigidbody2D>();
+        rb.mass = 0.1f;
+        joint.connectedBody = rb;
         var wa1 = model.Translator.Wheel1.Anchor % pn;
         joint.connectedAnchor = model.BodyGraph.Perimeter[wa1];
 
         wheel = wb.BuildPart(model, m_PartTemplate, model.Translator.Wheel2);
         wheel.transform.SetParent(body.transform);
         joint = wheel.GetComponent<WheelJoint2D>();
-        joint.connectedBody = body.gameObject.GetComponent<Rigidbody2D>();
+        rb = body.gameObject.GetComponent<Rigidbody2D>();
+        rb.mass = 0.1f;
+        joint.connectedBody = rb;
         var wa2 = model.Translator.Wheel2.Anchor % pn;
         if (wa1 == wa2) wa2 = (wa2 + 1) % pn;
         joint.connectedAnchor = model.BodyGraph.Perimeter[wa2];

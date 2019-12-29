@@ -39,10 +39,10 @@ public class Translator {
             new Vector2(2*Sin(c*(2f/3f+genome.RootPosition3/3f)), 2*Cos(c*(2f/3f+genome.RootPosition3/3f)))
         };
 
-        Extensions = new Genome.Extension[1];
+        Extensions = new Genome.Extension[genome.Extensions.Length];
         for(int i=0;i<Extensions.Length;i++)
         {
-            Extensions[i] = genome.Extensions;
+            Extensions[i] = genome.Extensions[i];
             Extensions[i].distanceB = Lerp(k_MinExtensionDistance, k_MaxExtensionDistance, Extensions[i].distanceB);
         }
 

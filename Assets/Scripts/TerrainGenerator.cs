@@ -11,6 +11,8 @@ public class TerrainGenerator : MonoBehaviour
     int m_PointCount = 100;
     [SerializeField]
     float m_Variance = .4f;
+    [SerializeField]
+    float m_MaxHeight = 5;
 
     float[] m_Points;
 
@@ -26,7 +28,7 @@ public class TerrainGenerator : MonoBehaviour
             }
             else
             {
-                m_Points[i] = Mathf.Clamp(m_Points[i - 1] + Random.Range(-m_Variance, m_Variance), 0, 5);
+                m_Points[i] = Mathf.Clamp(m_Points[i - 1] + Random.Range(-m_Variance, m_Variance), 0, m_MaxHeight);
             }
             surface[i] = new Vector2(i, m_Points[i]);
         }
