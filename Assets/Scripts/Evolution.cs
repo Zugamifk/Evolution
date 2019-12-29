@@ -120,7 +120,7 @@ public static class Evolution
 
     static System.Array MutateArray(System.Array value, System.Type elementType)
     {
-        var l = Clamp(value.Length + (Random.value > .5f ? 0 : Random.value > .5f ? 1 : -1), Genome.MinExtensions, Genome.MaxExtensions);
+        var l = Clamp(value.Length + (Random.value > k_MutationRate ? 0 : Random.value > .5f ? 1 : -1), Genome.MinExtensions, Genome.MaxExtensions);
         var a = new object[l];
         for (int i = 0; i < l; i++)
         {

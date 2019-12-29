@@ -146,7 +146,7 @@ MonoBehaviour:
   m_IndividualText: {fileID: 1094569449}
   m_GenerationText: {fileID: 664580219}
   m_CompetitorTemplate: {fileID: 1263811136}
-  m_TournamentSize: 16
+  m_TournamentSize: 32
   m_MaxSeconds: 10
   m_MaxDistance: 100
   m_Terrain: {fileID: 983732712}
@@ -817,7 +817,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: d58d53bbba1a43b4ab1733171de9daf9, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
